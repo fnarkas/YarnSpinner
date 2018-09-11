@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Yarn
 {
@@ -197,8 +198,9 @@ namespace Yarn
                     dialogue.LogErrorMessage("No loaded string table includes line " + i.operandA);
                     break;
                 }
-
-                lineHandler (new Dialogue.LineResult (lineText));
+                    var key = state.currentNodeName;
+                    Dialogue.LineResult line = new Dialogue.LineResult(lineText, key);
+                lineHandler (line);
 
                 break;
             case ByteCode.RunCommand:
@@ -388,10 +390,19 @@ namespace Yarn
                 }
 
                 // Otherwise, present the list of options to the user and let them pick
-                var optionStrings = new List<string> ();
-
+                    var optionStrings = new List<Yarn.Option> ();
+                    int c = 0;
                 foreach (var option in state.currentOptions) {
-                    optionStrings.Add (program.GetString (option.Key));
+                        Option optionObj = new Option();
+                        optionObj.text = program.GetString(option.Key);
+                        optionObj.key = state.currentNodeName + c;
+                        string regex = @"{(.*)}";
+                        Match match = Regex.Match(optionObj.text, regex);
+                        if (match.Success)
+                            optionObj.key = match.Groups[1].Value;
+                        optionObj.text = Regex.Replace(optionObj.text, regex, "");
+                        optionStrings.Add (optionObj);
+                        c++;
                 }
 
                 // We can't continue until our client tell us which option to pick
