@@ -173,6 +173,18 @@ namespace Yarn
 
         }
 
+        private string FindSpeaker(string text){
+            string regex = @"@(.*?)\s+";
+            Match match = Regex.Match(text, regex);
+            string speaker = null;
+            if (match.Success)
+            {
+                speaker = match.Groups[1].Value;
+               
+            }
+            return speaker;
+        }
+
         internal void RunInstruction(Instruction i) {
             switch (i.operation) {
             case ByteCode.Label:
@@ -199,7 +211,10 @@ namespace Yarn
                     break;
                 }
                     var key = state.currentNodeName;
-                    Dialogue.LineResult line = new Dialogue.LineResult(lineText, key);
+                    string speaker = FindSpeaker(lineText);
+                    if(speaker != null)
+                        lineText = lineText.Replace("@" + speaker, "");
+                    Dialogue.LineResult line = new Dialogue.LineResult(lineText,key, speaker);
                 lineHandler (line);
 
                 break;
@@ -401,6 +416,10 @@ namespace Yarn
                         if (match.Success)
                             optionObj.key = match.Groups[1].Value;
                         optionObj.text = Regex.Replace(optionObj.text, regex, "");
+                        string optionSpeaker = FindSpeaker(optionObj.text);
+                        if (optionSpeaker != null)
+                            optionObj.text = optionObj.text.Replace("@" + optionSpeaker, "");
+                        optionObj.speaker = optionSpeaker;
                         optionStrings.Add (optionObj);
                         c++;
                 }

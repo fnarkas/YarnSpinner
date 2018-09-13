@@ -27,6 +27,7 @@
           <type>AfterBuild</type>
           <command>cp ${TargetPath} "Unity/Assets/Yarn Spinner/Code/" </command>
           <workingdir>${SolutionDir}</workingdir>
+          <externalConsole>True</externalConsole>
         </Command>
       </CustomCommands>
     </CustomCommands>

@@ -49,8 +49,8 @@ namespace Yarn {
     /** (Currently this just wraps a single field, but doing it like this
      * gives us the option to add more stuff later without breaking the API.)
      */
-    public struct Line { public string text; public string key; }
-    public struct Option { public string text; public string key; }
+    public struct Line { public string text; public string key; public string speaker; }
+    public struct Option { public string text; public string key; public string speaker; }
     public struct Options { public IList<Option> options; }
     public struct Command { public string text; }
 
@@ -137,10 +137,11 @@ namespace Yarn {
 
             public Line line;
 
-            public LineResult (string text, string key) {
+            public LineResult (string text, string key, string speaker) {
                 var line = new Line();
                 line.text = text;
                 line.key = key;
+                line.speaker = speaker;
                 this.line = line;
             }
 
