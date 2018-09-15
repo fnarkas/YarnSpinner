@@ -147,12 +147,15 @@ namespace Yarn
                 executionState = ExecutionState.Running;
 
             Instruction currentInstruction = currentNode.instructions [state.programCounter];
+           
+            bool isLastInstruction = state.programCounter + 2 >= currentNode.instructions.Count;
 
-            RunInstruction (currentInstruction);
+
+            RunInstruction (currentInstruction, isLastInstruction);
 
             state.programCounter++;
 
-            if (state.programCounter >= currentNode.instructions.Count) {
+            if (state.programCounter>= currentNode.instructions.Count) {
                 executionState = ExecutionState.Stopped;
                 nodeCompleteHandler(new Dialogue.NodeCompleteResult(null));
                 dialogue.LogDebugMessage ("Run complete.");
@@ -185,7 +188,7 @@ namespace Yarn
             return speaker;
         }
 
-        internal void RunInstruction(Instruction i) {
+        internal void RunInstruction(Instruction i, bool isLast) {
             switch (i.operation) {
             case ByteCode.Label:
                 /// - Label
@@ -214,7 +217,7 @@ namespace Yarn
                     string speaker = FindSpeaker(lineText);
                     if(speaker != null)
                         lineText = lineText.Replace("@" + speaker, "");
-                    Dialogue.LineResult line = new Dialogue.LineResult(lineText,key, speaker);
+                    Dialogue.LineResult line = new Dialogue.LineResult(lineText,key, speaker, isLast);
                 lineHandler (line);
 
                 break;
