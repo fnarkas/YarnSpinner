@@ -214,6 +214,7 @@ namespace Yarn
                     break;
                 }
                     var key = state.currentNodeName;
+                    key += state.programCounter > 0 ? ""+state.programCounter : "";
                     string speaker = FindSpeaker(lineText);
                     if(speaker != null)
                         lineText = lineText.Replace("@" + speaker, "");
@@ -413,7 +414,7 @@ namespace Yarn
                 foreach (var option in state.currentOptions) {
                         Option optionObj = new Option();
                         optionObj.text = program.GetString(option.Key);
-                        optionObj.key = state.currentNodeName + c;
+                        optionObj.key = state.currentNodeName + "_OPT"+c;
                         string regex = @"{(.*)}";
                         Match match = Regex.Match(optionObj.text, regex);
                         if (match.Success)
