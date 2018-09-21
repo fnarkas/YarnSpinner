@@ -50,7 +50,7 @@ namespace Yarn {
      * gives us the option to add more stuff later without breaking the API.)
      */
     public struct Line { public string text; public string key; public string speaker; public bool isLast; }
-    public struct Option { public string text; public string key; public string speaker; }
+    public struct Option { public string text; public string key; public string speaker; public bool special; }
     public struct Options { public IList<Option> options; }
     public struct Command { public string text; }
 

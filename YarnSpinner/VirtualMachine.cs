@@ -420,6 +420,12 @@ namespace Yarn
                         if (match.Success)
                             optionObj.key = match.Groups[1].Value;
                         optionObj.text = Regex.Replace(optionObj.text, regex, "");
+                        // ## Denotes a special option
+                        regex = "%%";
+                        match = Regex.Match(optionObj.text, regex);
+                        
+                        optionObj.special = match.Success;
+                        optionObj.text = Regex.Replace(optionObj.text, regex, "");
                         string optionSpeaker = FindSpeaker(optionObj.text);
                         if (optionSpeaker != null)
                             optionObj.text = optionObj.text.Replace("@" + optionSpeaker, "");
